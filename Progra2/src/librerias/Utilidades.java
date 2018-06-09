@@ -468,7 +468,7 @@ public class Utilidades {
 	
 	
 	
-	//TP3 3a asd
+	//TP3 3a
 	
 	public ConjuntoTDA diferenciaSimetricaSinOperaciones(ConjuntoTDA A, ConjuntoTDA B)
 	{ 
