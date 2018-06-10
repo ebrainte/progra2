@@ -467,12 +467,47 @@ public class Utilidades {
 	//NO LO HICE, es caso copia del 1D
 	
 	
+	public void CopiarConjunto(ConjuntoTDA o, ConjuntoTDA d)
+	{
+		ConjuntoTDA aux = new ConjuntoLD();
+		aux.InicializarConjunto();
+
+		
+		while (!o.ConjuntoVacio())
+		{ 
+			int elemento = o.Elegir();
+			aux.Agregar(elemento);
+			d.Agregar(elemento);
+			o.Sacar(elemento);
+		}
+		
+		while(!aux.ConjuntoVacio())
+		{
+			int elemento = aux.Elegir();
+			o.Agregar(elemento);
+			aux.Sacar(elemento);
+		}
+		
+		
+	}
 	
-	//TP3 3a
+	//Union de Conjuntos
+	
+	public ConjuntoTDA Union(ConjuntoTDA A, ConjuntoTDA B){
+		ConjuntoTDA conjaaux = new ConjuntoLD();
+		ConjuntoTDA conjbaux = new ConjuntoLD();
+		
+		conjaaux.InicializarConjunto();
+		conjbaux.InicializarConjunto();
+		
+		//copio los Conjuntos Originales para que no se pierdan los originales
+	}
+	//TP3 3b
 	
 	public ConjuntoTDA diferenciaSimetricaSinOperaciones(ConjuntoTDA A, ConjuntoTDA B)
 	{ 
 		ConjuntoTDA resultado = new ConjuntoLD();
+		resultado.InicializarConjunto();
 	
 		while (!A.ConjuntoVacio())
 		{ 
