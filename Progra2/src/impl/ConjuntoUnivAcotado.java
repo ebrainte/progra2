@@ -20,7 +20,7 @@ public class ConjuntoUnivAcotado implements ConjuntoTDA {
 
 	@Override
 	public void Agregar(int x) {
-		if (cant < 100 )// tamano maximo acotado
+		if((x%2)==0) //si es par lo dejo entrar, acotando el universo
 		{
 			if(!this.Pertenece(x))
 			{ 
@@ -29,6 +29,7 @@ public class ConjuntoUnivAcotado implements ConjuntoTDA {
 			}
 		}
 	}
+	
 
 	@Override
 	public int Elegir() {
