@@ -496,11 +496,19 @@ public class Utilidades {
 	public ConjuntoTDA Union(ConjuntoTDA A, ConjuntoTDA B){
 		ConjuntoTDA conjaaux = new ConjuntoLD();
 		ConjuntoTDA conjbaux = new ConjuntoLD();
-		
+		ConjuntoTDA union = new ConjuntoLD();
 		conjaaux.InicializarConjunto();
 		conjbaux.InicializarConjunto();
+		union.InicializarConjunto();
 		
 		//copio los Conjuntos Originales para que no se pierdan los originales
+		this.CopiarConjunto(A, conjaaux);
+		this.CopiarConjunto(B, conjbaux);
+		//SIN TERMINAR
+		
+		return conjaaux;
+		
+		
 	}
 	//TP3 3b
 	
