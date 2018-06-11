@@ -504,14 +504,98 @@ public class Utilidades {
 		//copio los Conjuntos Originales para que no se pierdan los originales
 		this.CopiarConjunto(A, conjaaux);
 		this.CopiarConjunto(B, conjbaux);
-		//SIN TERMINAR
 		
-		return conjaaux;
+		//primero agrego en el conjunto union el conjunto A
+		while(!conjaaux.ConjuntoVacio())
+		{
+			int elemento = conjaaux.Elegir();
+			union.Agregar(elemento);
+			conjaaux.Sacar(elemento);
+		}
 		
+		//luego agrego los elemento del conjunto B al conjunto union
+		while(!conjbaux.ConjuntoVacio())
+		{
+			int elemento = conjbaux.Elegir();
+			union.Agregar(elemento);
+			conjbaux.Sacar(elemento);
+		}
 		
+		return union;
+				
 	}
-	//TP3 3b
 	
+	//Interseccion de Conjuntos
+	public ConjuntoTDA Interseccion(ConjuntoTDA A, ConjuntoTDA B)
+	{
+		ConjuntoTDA conjaaux = new ConjuntoLD();
+		ConjuntoTDA conjbaux = new ConjuntoLD();
+		ConjuntoTDA interseccion = new ConjuntoLD();
+		conjaaux.InicializarConjunto();
+		conjbaux.InicializarConjunto();
+		interseccion.InicializarConjunto();
+		
+		//copio los Conjuntos Originales para que no se pierdan
+		this.CopiarConjunto(A, conjaaux);
+		this.CopiarConjunto(B, conjbaux);
+		
+		//tomo los valores del conjunto A, y si pertenecen en B, se agregan al conjunto interseccion
+		
+		while(!conjaaux.ConjuntoVacio())
+		{
+			int elemento = conjaaux.Elegir();
+			if (conjbaux.Pertenece(elemento))
+			{
+				interseccion.Agregar(elemento);
+			}
+			conjaaux.Sacar(elemento);
+		}
+		//tomo los valores del conjunto B, y si pertenecen en A, se agregan al conjunto interseccion
+		
+		while(!conjbaux.ConjuntoVacio())
+		{
+			int elemento = conjbaux.Elegir();
+			if(conjaaux.Pertenece(elemento))
+			{
+				interseccion.Agregar(elemento);
+			}
+			conjbaux.Sacar(elemento);
+		}
+		
+		return interseccion;
+	}
+	
+	//Diferencia de Conjuntos
+	public ConjuntoTDA diferenciaConjuntos(ConjuntoTDA A, ConjuntoTDA B)
+	{
+		ConjuntoTDA conjaaux = new ConjuntoLD();
+		ConjuntoTDA conjbaux = new ConjuntoLD();
+		ConjuntoTDA diferencia = new ConjuntoLD();
+		conjaaux.InicializarConjunto();
+		conjbaux.InicializarConjunto();
+		diferencia.InicializarConjunto();
+		
+		
+		//copio los Conjuntos Originales para que no se pierdan
+		this.CopiarConjunto(A, conjaaux);
+		this.CopiarConjunto(B, conjbaux);
+		
+		
+		while(!conjaaux.ConjuntoVacio())
+		{
+			int elemento = conjaaux.Elegir();
+			if(!conjbaux.Pertenece(elemento))
+			{
+				diferencia.Agregar(elemento);
+			}
+			conjaaux.Sacar(elemento);
+		}
+			
+		return diferencia;
+				
+	}
+	
+	//TP3 3b
 	public ConjuntoTDA diferenciaSimetricaSinOperaciones(ConjuntoTDA A, ConjuntoTDA B)
 	{ 
 		ConjuntoTDA resultado = new ConjuntoLD();
@@ -538,6 +622,16 @@ public class Utilidades {
 			B.Sacar(elemento);
 		} 
 		return resultado;
+	}
+	
+	//TP3 3C
+	public ConjuntoTDA diferenciaSimetricaConOperaciones(ConjuntoTDA A, ConjuntoTDA B)
+	{
+		ConjuntoTDA difsim = new ConjuntoLD();
+		difsim.InicializarConjunto();
+		
+		difsim = this.Union(this.diferenciaConjuntos(A, B), this.diferenciaConjuntos(B, A));
+		return (difsim);
 	}
 }
 
