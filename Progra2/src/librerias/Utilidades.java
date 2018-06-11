@@ -633,6 +633,39 @@ public class Utilidades {
 		difsim = this.Union(this.diferenciaConjuntos(A, B), this.diferenciaConjuntos(B, A));
 		return (difsim);
 	}
+	
+	//TP3 3D
+	public boolean ConjuntosIguales(ConjuntoTDA A, ConjuntoTDA B)
+	{
+
+		//Si dos conjuntos son iguales, la diferencia deberia devolver un conjunto vacio, revisamos eso
+		ConjuntoTDA aux = new ConjuntoLD();
+		aux.InicializarConjunto();
+		
+		aux = this.diferenciaConjuntos(A, B);
+		
+		return (aux.ConjuntoVacio());
+	}
+	
+	//TP3 3E
+	public int CardinalidadConjunto(ConjuntoTDA A)
+	{
+		ConjuntoTDA aux = new ConjuntoLD();
+		aux.InicializarConjunto();
+		
+		int a=0;
+		
+		this.CopiarConjunto(A, aux);
+		
+		while(aux.ConjuntoVacio())
+		{
+			int elemento = aux.Elegir();
+			a=a+1;
+			aux.Sacar(elemento);
+		}
+		
+		return a;
+	}
 }
 
 
