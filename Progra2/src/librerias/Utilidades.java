@@ -12,6 +12,7 @@ import impl.ColaPU;
 import impl.ColaPI;
 import impl.ColaPrioridadAO;
 import impl.ColaPrioridadDA;
+import impl.ColaPrioridadLD;
 import impl.ConjuntoLD;
 import impl.DicSimpleA;
 import impl.DicMultipleA;
@@ -769,8 +770,148 @@ public class Utilidades {
 		}
 	}
 	
+	// TP3 5 1.1
+	public DiccionarioMultipleTDA UnionDicMult(DiccionarioMultipleTDA D1, DiccionarioMultipleTDA D2)
+	{
+		int c,v;
+		ConjuntoTDA claves = new ConjuntoLD();
+		claves.InicializarConjunto();
+		ConjuntoTDA valores = new ConjuntoLD();
+		valores.InicializarConjunto();
+		
+		DiccionarioMultipleTDA resultado = new DicMultipleA();
+		resultado.InicializarDiccionario();
+		
+		claves = D1.Claves();
+		
+		while(!claves.ConjuntoVacio())
+		{
+			c = claves.Elegir();
+			valores = D1.Recuperar(c);
+			while(!valores.ConjuntoVacio())
+			{
+				v = valores.Elegir();
+				resultado.Agregar(c, v);
+				valores.Sacar(v);
+			}
+			claves.Sacar(c);
+		}
+		
+		
+		
+		claves = D2.Claves();
+		
+		while(!claves.ConjuntoVacio())
+		{
+			c = claves.Elegir();
+			valores = D2.Recuperar(c);
+			while(!valores.ConjuntoVacio())
+			{
+				v = valores.Elegir();
+				resultado.Agregar(c, v);
+				valores.Sacar(v);
+			}
+			claves.Sacar(c);
+		}
+		
+		return resultado;
+		
+	}
 	
 	
+	//TP3 5 1.2
+	public DiccionarioMultipleTDA InterseccionDicMult(DiccionarioMultipleTDA D1, DiccionarioMultipleTDA D2)
+	{
+		
+		int c,v;
+		ConjuntoTDA claves = new ConjuntoLD();
+		claves.InicializarConjunto();
+		ConjuntoTDA valores = new ConjuntoLD();
+		valores.InicializarConjunto();
+		
+		DiccionarioMultipleTDA resultado = new DicMultipleA();
+		resultado.InicializarDiccionario();
+		
+		claves = this.Union(D1.Claves(), D1.Claves());
+		
+		while(!claves.ConjuntoVacio())
+		{
+			c = claves.Elegir();
+			valores = this.Interseccion(D1.Recuperar(c), D2.Recuperar(c));
+			while(!valores.ConjuntoVacio())
+			{
+				v = valores.Elegir();
+				resultado.Agregar(c, v);
+				valores.Sacar(v);
+			}
+			claves.Sacar(c);
+		}
+		
+		return resultado;
+	}
+	
+	
+	//TP3 5 1.3
+	public DiccionarioMultipleTDA InterseccionClavesDicMult(DiccionarioMultipleTDA D1, DiccionarioMultipleTDA D2)
+	{
+		
+		int c,v;
+		ConjuntoTDA claves = new ConjuntoLD();
+		claves.InicializarConjunto();
+		ConjuntoTDA valores = new ConjuntoLD();
+		valores.InicializarConjunto();
+		
+		DiccionarioMultipleTDA resultado = new DicMultipleA();
+		resultado.InicializarDiccionario();
+		
+		claves = this.Interseccion(D1.Claves(), D1.Claves());
+		
+		while(!claves.ConjuntoVacio())
+		{
+			c = claves.Elegir();
+			valores = this.Union(D1.Recuperar(c), D1.Recuperar(c));
+			while(!valores.ConjuntoVacio())
+			{
+				v = valores.Elegir();
+				resultado.Agregar(c, v);
+				valores.Sacar(v);
+			}
+			claves.Sacar(c);
+		}
+		
+		return resultado;
+	}
+	
+	//TP3 5 1.4
+	public DiccionarioMultipleTDA InterseccionClavesyValoresDicMult(DiccionarioMultipleTDA D1, DiccionarioMultipleTDA D2)
+	{
+		
+		int c,v;
+		ConjuntoTDA claves = new ConjuntoLD();
+		claves.InicializarConjunto();
+		ConjuntoTDA valores = new ConjuntoLD();
+		valores.InicializarConjunto();
+		
+		DiccionarioMultipleTDA resultado = new DicMultipleA();
+		resultado.InicializarDiccionario();
+		
+		claves = this.Interseccion(D1.Claves(), D1.Claves());
+		
+		while(!claves.ConjuntoVacio())
+		{
+			c = claves.Elegir();
+			valores = this.Interseccion(D1.Recuperar(c), D1.Recuperar(c));
+			while(!valores.ConjuntoVacio())
+			{
+				v = valores.Elegir();
+				resultado.Agregar(c, v);
+				valores.Sacar(v);
+			}
+			claves.Sacar(c);
+		}
+		
+		return resultado;
+	}
 }
 
 
