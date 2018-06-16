@@ -506,6 +506,7 @@ public class Utilidades {
 		
 	}
 	
+	//TP2 Ejercicio 6
 	//Union de Conjuntos
 	
 	public ConjuntoTDA Union(ConjuntoTDA A, ConjuntoTDA B){
@@ -540,6 +541,7 @@ public class Utilidades {
 				
 	}
 	
+	//TP2 Ejercicio 6
 	//Interseccion de Conjuntos
 	public ConjuntoTDA Interseccion(ConjuntoTDA A, ConjuntoTDA B)
 	{
@@ -580,6 +582,7 @@ public class Utilidades {
 		return interseccion;
 	}
 	
+	//TP2 Ejercicio 6
 	//Diferencia de Conjuntos
 	public ConjuntoTDA diferenciaConjuntos(ConjuntoTDA A, ConjuntoTDA B)
 	{
