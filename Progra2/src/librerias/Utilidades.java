@@ -912,6 +912,28 @@ public class Utilidades {
 		
 		return resultado;
 	}
+	
+	//TP3 5.2
+	
+	public DiccionarioMultipleTDA DiccionarioMultipleDS(DiccionarioSimpleTDA D)
+	{
+		int c,v;
+		ConjuntoTDA conjaux = new ConjuntoLD();
+		conjaux.InicializarConjunto();
+		
+		DiccionarioMultipleTDA resultado = new DicMultipleA();
+		resultado.InicializarDiccionario();
+		
+		conjaux = D.Claves();
+		while(!conjaux.ConjuntoVacio())
+		{
+			c=conjaux.Elegir();
+			v=D.Recuperar(c);
+			resultado.Agregar(v, c);
+			conjaux.Sacar(c);
+		}
+		return resultado;
+	}
 }
 
 
