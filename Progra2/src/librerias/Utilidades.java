@@ -255,7 +255,21 @@ public class Utilidades {
 		return true;
 	}
 
-	
+	public void CopiarColaPrioridad(ColaPrioridadTDA o, ColaPrioridadTDA d) {
+		ColaPrioridadAO colaaux = new ColaPrioridadAO();
+		colaaux.InicializarCola();
+		
+		while (!o.ColaVacia()) {
+			colaaux.AcolarPrioridad(o.Primero(), o.Prioridad());
+			o.Desacolar();
+		}
+		while (!colaaux.ColaVacia()) {
+			o.AcolarPrioridad(colaaux.Primero(), colaaux.Prioridad());
+			d.AcolarPrioridad(colaaux.Primero(), colaaux.Prioridad());
+			colaaux.Desacolar();
+		}
+	}
+
 	
 	//TRABAJO PRACTICO 2
 	
@@ -657,7 +671,7 @@ public class Utilidades {
 		
 		this.CopiarConjunto(A, aux);
 		
-		while(aux.ConjuntoVacio())
+		while(!aux.ConjuntoVacio())
 		{
 			int elemento = aux.Elegir();
 			a=a+1;
@@ -666,6 +680,97 @@ public class Utilidades {
 		
 		return a;
 	}
+	
+	//TP3 3F
+	public ConjuntoTDA GenerarConjunto(PilaTDA P, ColaTDA C)
+	{
+		//generamos una pila y una cola auxiliar para evitar destruir las originales
+		PilaTDA pilaaux = new PilaTF();
+		pilaaux.InicializarPila();
+		
+		ColaTDA colaaux = new ColaPI();
+		colaaux.InicializarCola();
+		
+		this.CopiarPila(P, pilaaux);
+		this.CopiarCola(C, colaaux);
+		
+		ConjuntoTDA conjuntoaux = new ConjuntoLD();
+		conjuntoaux.InicializarConjunto();
+		
+		//primero agrego elementos de la pila
+		while(!pilaaux.PilaVacia())
+		{
+			conjuntoaux.Agregar(pilaaux.tope());
+			pilaaux.Desapilar();
+		}
+		
+		//luego agrego elementos de la cola
+		while(!colaaux.ColaVacia())
+		{
+			conjuntoaux.Agregar(colaaux.Primero());
+			colaaux.Desacolar();
+		}
+		
+		return(conjuntoaux);
+	}
+	
+	//TP3 3G
+	public boolean SiPilaIgualCola(PilaTDA P, ColaTDA C)
+	{
+		//generamos una pila y una cola auxiliar para evitar destruir las originales
+		PilaTDA pilaaux = new PilaTF();
+		pilaaux.InicializarPila();
+				
+		ColaTDA colaaux = new ColaPI();
+		colaaux.InicializarCola();
+				
+		this.CopiarPila(P, pilaaux);
+		this.CopiarCola(C, colaaux);
+		
+		ConjuntoTDA conjuntoaux = new ConjuntoLD();
+		conjuntoaux.InicializarConjunto();
+		
+		//primero agrego elementos de la pila
+		while(!pilaaux.PilaVacia())
+		{
+			conjuntoaux.Agregar(pilaaux.tope());
+			pilaaux.Desapilar();
+		}
+		
+		
+		//ahora verificamos que existan todos los elementos de la cola adentro del conjunto, si existen es porque tanto la pila como la cola son iguales
+		while(!colaaux.ColaVacia())
+		{
+			int elemento = colaaux.Primero();
+			if (!conjuntoaux.Pertenece(elemento))
+				return false;
+			
+			colaaux.Desacolar();
+		}
+		return true;
+		
+	}
+	
+	
+	//TP3 4a
+	public void ColaPrioridadADicMult(ColaPrioridadTDA C, DiccionarioMultipleTDA D)
+	{
+		//genero cola auxiliar y la copio para no perder la original
+		
+		ColaPrioridadTDA colaaux = new ColaPrioridadLD();
+		colaaux.InicializarCola();
+		
+		this.CopiarColaPrioridad(C, colaaux);
+		
+		while(!colaaux.ColaVacia())
+		{
+			D.Agregar(colaaux.Primero(), colaaux.Prioridad());
+			colaaux.Desacolar();
+		}
+	}
+	
+	
+	
 }
 
 

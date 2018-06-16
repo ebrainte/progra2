@@ -1,6 +1,6 @@
 package impl;
-import impl.NodoPrioridad;
 import api.ColaPrioridadTDA;
+import impl.NodoPrioridad;
 
 public class ColaPrioridadLD implements ColaPrioridadTDA 
 {
