@@ -567,6 +567,9 @@ public class Utilidades {
 			}
 			conjaaux.Sacar(elemento);
 		}
+		//vuelvo a regenerar el conjunto A auxiliar
+		this.CopiarConjunto(A, conjaaux);
+		
 		//tomo los valores del conjunto B, y si pertenecen en A, se agregan al conjunto interseccion
 		
 		while(!conjbaux.ConjuntoVacio())
@@ -719,7 +722,7 @@ public class Utilidades {
 	}
 	
 	//TP3 3G
-	public boolean SiPilaIgualCola(PilaTDA P, ColaTDA C)
+	public boolean IsPilaIgualCola(PilaTDA P, ColaTDA C)
 	{
 		//generamos una pila y una cola auxiliar para evitar destruir las originales
 		PilaTDA pilaaux = new PilaTF();
