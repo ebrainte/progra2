@@ -244,14 +244,17 @@ public class Utilidades {
 		ColaPrioridadTDA cola_b = new ColaPrioridadDA();
 		cola_b.InicializarCola();
 		
-		while(!a.ColaVacia())
+		this.CopiarColaPrioridad(a, cola_a);
+		this.CopiarColaPrioridad(b, cola_b);
+		
+		while(!cola_a.ColaVacia())
 		{
-			if (a.Primero() != b.Primero() || a.Prioridad() != b.Prioridad())
+			if (cola_a.Primero() != cola_b.Primero() || cola_a.Prioridad() != cola_b.Prioridad())
 			{
 				return false;
 			}
-			a.Desacolar();
-			b.Desacolar();
+			cola_a.Desacolar();
+			cola_b.Desacolar();
 		}
 		return true;
 	}
@@ -279,7 +282,7 @@ public class Utilidades {
 	// TRABAJO PRACTICO3
 
 
-
+	//TP 3 1A
 	public boolean IsPilaCapicua(PilaTDA p)
 	{
 			
