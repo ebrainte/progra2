@@ -1,7 +1,6 @@
-package impl;
+package implement.listas;
 
 import api.ConjuntoTDA;
-import impl.Nodo;
 
 public class ConjuntoLD implements ConjuntoTDA {
 	Nodo c;

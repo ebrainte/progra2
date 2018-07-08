@@ -2,8 +2,8 @@ package TPs.Tp1;
 
 import api.ColaPrioridadTDA;
 import api.ColaTDA;
-import impl.ColaPU;
-import impl.ColaPrioridadDA;
+import implement.arreglos.ColaPU;
+import implement.arreglos.ColaPrioridadDA;
 import librerias.Utilidades;
 
 public class Ejercicio6_a {

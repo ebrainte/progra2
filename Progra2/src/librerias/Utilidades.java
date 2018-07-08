@@ -6,19 +6,34 @@ import api.ColaTDA;
 import api.ConjuntoTDA;
 import api.DiccionarioMultipleTDA;
 import api.DiccionarioSimpleTDA;
-import impl.PilaTF;
-import impl.PilaTI;
-import impl.ColaPU;
-import impl.ColaPI;
-import impl.ColaPrioridadAO;
-import impl.ColaPrioridadDA;
-import impl.ColaPrioridadLD;
-import impl.ConjuntoLD;
-import impl.DicSimpleA;
-import impl.DicMultipleA;
+import api.ABBTDA;
+import implement.arreglos.ColaPI;
+import implement.arreglos.ColaPU;
+import implement.arreglos.ColaPrioridadAO;
+import implement.arreglos.ColaPrioridadDA;
+import implement.arreglos.DicMultipleA;
+import implement.arreglos.DicSimpleA;
+import implement.arreglos.PilaTF;
+import implement.arreglos.PilaTI;
+import implement.listas.ColaPrioridadLD;
+import implement.listas.ConjuntoLD;
+import implement.listas.PilaLD;
+import implement.listas.ABB;
+
 
 public class Utilidades {
 
+	// Objetos y atributos auxiliares para la carga de elementos
+	int altura;
+	int counter;
+	int aux;
+	boolean verificado;
+	ConjuntoTDA conjuntoAux;
+	
+	/////////////////////////////////////////////////////////////////////////////
+	//Pilas
+	/////////////////////////////////////////////////////////////////////////////
+	
 	public void ImprimirPila(PilaTDA o){
 	
 	PilaTDA aux = new PilaTF();
@@ -71,9 +86,12 @@ public class Utilidades {
 	public int SumarElementosPila(PilaTDA p)
 	{ 
 		int suma = 0; 
-		while (!p.PilaVacia()){ 
-			suma = suma + p.tope(); 
-			p.Desapilar(); 
+		PilaTDA aux = new PilaTF();
+		aux.InicializarPila();
+		CopiarPila(p,aux);
+		while (!aux.PilaVacia()){ 
+			suma = suma + aux.tope(); 
+			aux.Desapilar(); 
 			} 
 		return suma;
 	} 
@@ -81,11 +99,9 @@ public class Utilidades {
 	{ 
 		int suma = 0;
 		int cantidad = 0;
-		float promedio = 0;
 		suma = SumarElementosPila(p);
 		cantidad = ContarPila(p);
-		promedio = suma/cantidad;
-		return promedio;
+		return suma/cantidad;
 	}
 	/////////////////////////////////////////////////////////////////////////////
 	//Colas
@@ -281,6 +297,19 @@ public class Utilidades {
 	
 	// TRABAJO PRACTICO3
 
+	public void ImprimirConjunto(ConjuntoTDA c)
+	{
+		ConjuntoTDA conjaux = new ConjuntoLD();
+		conjaux.InicializarConjunto();
+		
+		CopiarConjunto(c, conjaux);
+		
+		while(!conjaux.ConjuntoVacio())
+		{
+			System.out.println(conjaux.Elegir());
+			conjaux.Sacar(conjaux.Elegir());
+		}
+	}
 
 	//TP 3 1A
 	public boolean IsPilaCapicua(PilaTDA p)
@@ -288,8 +317,10 @@ public class Utilidades {
 			
 		PilaTDA pilaaux = new PilaTF();
 		pilaaux.InicializarPila();
+		PilaTDA pilaaux2 = new PilaTF();
+		pilaaux2.InicializarPila();
 		
-		ColaTDA colaaux = new ColaPI();
+		ColaTDA colaaux = new ColaPU();
 		colaaux.InicializarCola();
 		
 		//copio la pila para no perder la original
@@ -302,13 +333,20 @@ public class Utilidades {
 			pilaaux.Desapilar(); 
 		}
 		
+		CopiarPila(p,pilaaux);
+		//paso la cola a una pila (para que quede al reves)
+		while (!colaaux.ColaVacia())
+		{ 
+			pilaaux2.Apilar(colaaux.Primero()); 
+			colaaux.Desacolar(); 
+		}
+		
 		//verifico si es capicua (comparando los elementos 1 a 1 retornando false cuando hay 1 distinto
-		while(!colaaux.ColaVacia()){
-			if(pilaaux.tope()!=colaaux.Primero())
+		while(!pilaaux.PilaVacia()){
+			if(pilaaux.tope()!=pilaaux2.tope())
 				return false;
-				
 			pilaaux.Desapilar();
-			colaaux.Desacolar();
+			pilaaux2.Desapilar();
 		}
 		
 		return true;
@@ -337,28 +375,11 @@ public class Utilidades {
 	}
 	
 	//TP 3 1c
-	public void DividirPila(PilaTDA p)
+	public void DividirPila(PilaTDA p, PilaTDA M1, PilaTDA M2)
 	{
 		int CantElem=0;
-		//genero pila auxiliar, con esta voy a contar la cantidad de elementos que tiene para luego
-		//desapilar solo en la mitad, y apilarla en una pila nueva
-		PilaTDA pilaaux = new PilaTF();
-		pilaaux.InicializarPila();
+		CantElem = ContarPila(p);
 		
-		PilaTDA M1 = new PilaTF();
-		M1.InicializarPila();
-		
-		PilaTDA M2 = new PilaTF();
-		M2.InicializarPila();
-		
-		this.CopiarPila(p, pilaaux);
-		
-		//cuento la cantidad de elementos
-		while(!pilaaux.PilaVacia())
-		{
-			CantElem++;
-			pilaaux.Desapilar();
-		}
 		CantElem = CantElem/2;
 		
 		this.CopiarPila(p, M1);
@@ -369,58 +390,30 @@ public class Utilidades {
 			M1.Desapilar();
 			CantElem--;
 		}
+		InvertirPila(M2);
 		
 	}
 
 	//TP 3 1d
-	public void ConjElemRep(PilaTDA p)
+	public ConjuntoTDA ConjElemRep(PilaTDA p)
 	{
 
-		// pasar pila a un diccionario simple
-		//la clave es el elemento de la pial
-		// a medida que voy agregando, voy viendo si ya existe la clave, y si existe, voy 
-		// incrementando el valor
-		//una vez finalizado, pido la lista de claves de ese diccionario
-		//lo recorro, y elimino del diccionario todos los que tengan clave 1
-		//una vez finalizado, paso el diccionario a un conjunto
-		
-		PilaTDA pilaaux = new PilaTF();
-		pilaaux.InicializarPila();
-		
-		DiccionarioSimpleTDA dict = new DicSimpleA();
-		dict.InicializarDiccionario();
-		
-		this.CopiarPila(p, pilaaux);
-		
+		PilaLD pilaAux = new PilaLD();
+		pilaAux.InicializarPila();
+		ConjuntoLD conjAux = new ConjuntoLD();
+		conjAux.InicializarConjunto();
+		ConjuntoLD ret = new ConjuntoLD();
+		ret.InicializarConjunto();
+		CopiarPila(p, pilaAux);
+		while (!pilaAux.PilaVacia()) {
+			if (!conjAux.Pertenece(pilaAux.tope())) {
+				ret.Agregar(pilaAux.tope());
+			}
+			conjAux.Agregar(pilaAux.tope());
+			pilaAux.Desapilar();
+		}
+		return ret;
 
-		
-		while(!pilaaux.PilaVacia())
-		{
-			ConjuntoTDA claves = dict.Claves();
-			int valor;
-			if(claves.Pertenece(pilaaux.tope()))//reviso si existe la clave con el valor del tope de la pila
-			{
-				valor = dict.Recuperar(pilaaux.tope());
-				valor++;
-				dict.Agregar(pilaaux.tope(), valor);
-			}
-			else
-			{
-				dict.Agregar(pilaaux.tope(), 1);
-			}
-			pilaaux.Desapilar();
-		}
-		//ahora tengo un diccionario dict donde tengo las claves y valores, elimino lo de valor 1
-		ConjuntoTDA claves = dict.Claves();
-		while(!claves.ConjuntoVacio())
-		{
-			if(dict.Recuperar(claves.Elegir()) == 1)
-			{
-				dict.Eliminar(claves.Elegir());
-			}
-			claves.Sacar(claves.Elegir());
-		}
-		
 	}
 	
 	
@@ -943,6 +936,214 @@ public class Utilidades {
 		}
 		return resultado;
 	}
+	
+	
+	
+	
+	
+	////////////////////////TP4
+	
+	
+	
+	
+	
+	
+	// Arboles
+	public void preOrder(ABBTDA a) {
+		if (!a.ArbolVacio()) {
+			System.out.println(a.Raiz());
+			preOrder(a.HijoIzq());
+			preOrder(a.HijoDer());
+		}
+	}
+	
+	public void inOrder(ABBTDA a) {
+		if (!a.ArbolVacio()) {
+			inOrder(a.HijoIzq());
+			System.out.println(a.Raiz());
+			inOrder(a.HijoDer());
+		}
+	}
+	
+	public void postOrder(ABBTDA a) {
+		if (!a.ArbolVacio()) {
+			postOrder(a.HijoIzq());
+			postOrder(a.HijoDer());
+			System.out.println(a.Raiz());
+		}
+	}
+	
+	// Metodo para cargar un conjunto siempre que los valores del arbol sean mayor que K
+	public ConjuntoTDA cargarConjunto(ABBTDA arbol, int k) {
+		conjuntoAux = new ConjuntoLD();
+		conjuntoAux.InicializarConjunto();
+		cConjunto(arbol, k);
+		return conjuntoAux;
+	}
+	
+	// Metodo auxiliar recursivo para la carga del conjunto enviado desde cargarConjunto()
+	private void cConjunto(ABBTDA arbol, int k) {
+		if (!arbol.ArbolVacio()) {
+			if (arbol.Raiz()>k)
+				conjuntoAux.Agregar(arbol.Raiz());
+			cConjunto(arbol.HijoDer(), k);
+			cConjunto(arbol.HijoIzq(), k);
+		}
+	}
+	
+	// Buscar el valor inmediatamente anterior a k en un arbol
+	public int valorAnterior(ABBTDA arbol, int k) {
+		aux = k;
+		valAnterior (arbol, k);
+		return aux;
+	}
+	
+	private void valAnterior(ABBTDA arbol, int k) {
+		if (!arbol.ArbolVacio()) {
+			if (!arbol.HijoDer().ArbolVacio() && arbol.HijoDer().Raiz()==k)
+				aux = arbol.Raiz();
+			if (!arbol.HijoIzq().ArbolVacio() && arbol.HijoIzq().Raiz()==k)
+				aux = arbol.Raiz();
+			valAnterior(arbol.HijoDer(),k);
+			valAnterior(arbol.HijoIzq(),k);			
+		}
+	}
+	
+	public boolean verificaABBElementosIguales(ABBTDA a, ABBTDA b) {
+		// Siempre que sean identicos entra en este if
+		if (!a.ArbolVacio() && !b.ArbolVacio() && a.Raiz() == b.Raiz()) {
+			return ( (verificaABBElementosIguales(a.HijoDer(), b.HijoDer()) && 
+					verificaABBElementosIguales(a.HijoIzq(), b.HijoIzq())));
+		}				
+		else // si llego al final devuelve true ya que son identicos hasta el final, si hay diferencias devuelve false
+			return (a.ArbolVacio() && b.ArbolVacio());
+	}
+	
+	public boolean verificaABBIguales(ABBTDA a, ABBTDA b) {
+		// Siempre que sean identicos entra en este if
+		if (!a.ArbolVacio() && !b.ArbolVacio()) {
+			return ( (verificaABBIguales(a.HijoDer(), b.HijoDer()) && verificaABBIguales(a.HijoIzq(), b.HijoIzq())));
+		}				
+		else // si llego al final devuelve true ya que son identicos hasta el final, si hay diferencias devuelve false
+			return (a.ArbolVacio() && b.ArbolVacio());
+	}
+	
+	public int Contar(ABBTDA a) {
+		if (a.ArbolVacio()) {
+			return 0;
+		} else {
+			return (1+Contar(a.HijoIzq()) + Contar(a.HijoDer()));
+		}
+	}
+	
+	public int sumarElementos(ABBTDA a) {
+		if (a.ArbolVacio())
+			return 0;
+		else 
+			return (a.Raiz()+sumarElementos(a.HijoDer()) + sumarElementos(a.HijoIzq()));
+	}
+	
+	public int contarHojas(ABBTDA a) {
+		if (a.ArbolVacio())
+			return 0;
+		else if (a.HijoDer().ArbolVacio() && a.HijoIzq().ArbolVacio())
+			return 1 + contarHojas(a.HijoDer()) + contarHojas(a.HijoIzq());
+		else
+			return contarHojas(a.HijoDer()) + contarHojas(a.HijoIzq());
+
+	}
+	
+	public int alturaArbol(ABBTDA a) {
+		altura = 0;
+		if (!a.ArbolVacio())
+			alturaArbol(a,1);
+		return altura;
+	}
+	
+	public void alturaArbol(ABBTDA a, int nivel) {
+		if (!a.ArbolVacio()) {
+			alturaArbol(a.HijoDer(),nivel+1);
+			if (nivel>altura)
+				altura = nivel;
+			alturaArbol(a.HijoIzq(), nivel+1);
+		}
+	}
+	
+	public int elementosNivelArbol(ABBTDA a, int nivel) {
+		altura = nivel;
+		
+		if (!a.ArbolVacio())
+			nivelArbol(a, 1);
+		return counter;
+	}
+	
+	public void nivelArbol(ABBTDA a, int nivel) {
+		if (!a.ArbolVacio()) {
+			nivelArbol(a.HijoDer(), nivel+1);
+			if (nivel==altura)
+				counter++;
+			nivelArbol(a.HijoIzq(),nivel+1);
+		}
+	}
+	
+	public boolean existeElementoEnABB(ABBTDA t, int x) {
+		if (t.ArbolVacio()) {
+			return false;
+		} else if (t.Raiz() == x) {
+			return true;
+		} 
+		else if (t.Raiz() > x) {
+			return this.existeElementoEnABB(t.HijoIzq(), x);
+		} else 
+			return this.existeElementoEnABB(t.HijoDer(),x);
+	}
+	
+	public int calcularProfundidad(ABBTDA t, int x) {
+		if (t.ArbolVacio()) {
+			return 0;
+		}
+		else if (t.Raiz() == x) {
+			return 0;
+		} else if (t.Raiz() >x) {
+			return (1+this.calcularProfundidad(t.HijoIzq(), x));
+		} else 
+			return (1+this.calcularProfundidad(t.HijoDer(), x));
+	}
+	
+	
+	public boolean esHoja(ABBTDA a, int x) {
+		if (a.ArbolVacio())
+			return false;
+		else if ( a.Raiz() == x && a.HijoDer().ArbolVacio() && a.HijoDer().ArbolVacio()) {
+			return true;
+		} else if (a.Raiz() > x)
+			return this.esHoja(a.HijoIzq(), x);
+		else
+			return this.esHoja(a.HijoDer(), x);
+	}
+	
+	public int mayor(ABBTDA a) {
+		if (a.HijoDer().ArbolVacio())
+			return a.Raiz();
+		else 
+			return mayor(a.HijoDer());
+	}
+	
+	public int menor(ABBTDA a) {
+		if (a.HijoIzq().ArbolVacio())
+			return a.Raiz();
+		else
+			return menor(a.HijoIzq());
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
 
 

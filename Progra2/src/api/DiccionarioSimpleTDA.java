@@ -1,7 +1,7 @@
 package api;
 
-import impl.ConjuntoLD;
-import impl.DicSimpleA;
+import implement.arreglos.DicSimpleA;
+import implement.listas.ConjuntoLD;
 
 public interface DiccionarioSimpleTDA {
 

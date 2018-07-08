@@ -1,6 +1,7 @@
-package impl;
+package implement.arreglos;
 
 import api.DiccionarioMultipleTDA;
+import implement.listas.ConjuntoLD;
 import api.ConjuntoTDA;
 public class DicMultipleA implements DiccionarioMultipleTDA {
 

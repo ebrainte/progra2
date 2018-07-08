@@ -1,6 +1,5 @@
-package impl;
+package implement.listas;
 
-import impl.Nodo;
 import api.ColaTDA;
 
 public class ColaLD implements ColaTDA{

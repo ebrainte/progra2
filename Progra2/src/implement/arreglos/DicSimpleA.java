@@ -1,6 +1,7 @@
-package impl;
+package implement.arreglos;
 
 import api.DiccionarioSimpleTDA;
+import implement.listas.ConjuntoLD;
 import api.ConjuntoTDA;
 
 public class DicSimpleA implements DiccionarioSimpleTDA {

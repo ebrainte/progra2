@@ -1,6 +1,5 @@
 package implement.listas;
 import api.PilaTDA;
-import impl.Nodo;
 
 public class PilaLD implements PilaTDA
 {

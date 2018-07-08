@@ -1,8 +1,8 @@
-package impl;
+package implement.arreglos;
 
 import api.ColaTDA;
 
-public class ColaPU implements ColaTDA {
+public class ColaPI implements ColaTDA {
 
 	int [] a; int indice;
 	public void InicializarCola()
@@ -13,26 +13,25 @@ public class ColaPU implements ColaTDA {
 	
 	public void Acolar(int x)
 	{ 
-		for (int i = indice -1; i >=0; i--) 
-			a[i+1] = a[i]; 
-		a[0] = x;
+		a[indice] = x; 
 		indice++; 
 	}
-
-
+	
 	public void Desacolar()
 	{ 
+		for (int i = 0; i < indice -1; i++)
+			a[i] = a[i+1]; 
 		indice --; 
 	}
-
+	
 	public boolean ColaVacia()
 	{ 
 		return (indice == 0); 
-	} 
-	
-	public int Primero()
-	{ 
-		return a[indice -1]; 
 	}
+	
+	public int Primero(){ 
+		return a[0]; 
+	}
+
 
 }
