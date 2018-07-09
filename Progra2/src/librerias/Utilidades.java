@@ -440,19 +440,13 @@ public class Utilidades {
 	}
 
 	//TP3 2b
-	public void DividirCola(ColaTDA c)
+	public void DividirCola(ColaTDA c, ColaTDA M1, ColaTDA M2)
 	{
 		int CantElem=0;
 		//genero cola auxiliar, con esta voy a contar la cantidad de elementos que tiene para luego
 		//desacolar solo en la mitad, y acolarla en una cola nueva
 		ColaTDA colaaux = new ColaPI();
 		colaaux.InicializarCola();
-		
-		ColaTDA M1 = new ColaPI();
-		M1.InicializarCola();
-		
-		ColaTDA M2 = new ColaPI();
-		M1.InicializarCola();
 		
 		this.CopiarCola(c, colaaux);
 		
@@ -463,19 +457,38 @@ public class Utilidades {
 			colaaux.Desacolar();
 		}
 		CantElem = CantElem/2;
-		this.CopiarCola(c, M1);
-		//De la original M1, voy a desacolar solamente la mitad, la cual se va a acolar en M2
+		this.CopiarCola(c, M2);
+		//De la original M2, voy a desacolar solamente la mitad, la cual se va a acolar en M1
 		while(CantElem!=0)
 		{
-			M2.Acolar(M1.Primero());
-			M1.Desacolar();
+			M1.Acolar(M2.Primero());
+			M2.Desacolar();
 			CantElem--;
 		}
 		
 	}
 	
-	//TP3 2c
-	//NO LO HICE, es caso copia del 1D
+	//TP 3 2C
+		public ConjuntoTDA ConjElemRepCola(ColaTDA c)
+		{
+
+			ColaTDA colaAux = new ColaPI();
+			colaAux.InicializarCola();
+			ConjuntoLD conjAux = new ConjuntoLD();
+			conjAux.InicializarConjunto();
+			ConjuntoLD ret = new ConjuntoLD();
+			ret.InicializarConjunto();
+			CopiarCola(c, colaAux);
+			while (!colaAux.ColaVacia()) {
+				if (!conjAux.Pertenece(colaAux.Primero())) {
+					ret.Agregar(colaAux.Primero());
+				}
+				conjAux.Agregar(colaAux.Primero());
+				colaAux.Desacolar();
+			}
+			return ret;
+
+		}
 	
 	
 	public void CopiarConjunto(ConjuntoTDA o, ConjuntoTDA d)
@@ -754,6 +767,35 @@ public class Utilidades {
 		
 	}
 	
+	//Imprimo Diccionario Multiple
+	public void ImprimirDicMult(DiccionarioMultipleTDA D)
+	{
+		int c;
+		DiccionarioMultipleTDA dictaux = new DicMultipleA();
+		dictaux.InicializarDiccionario();
+		
+		ConjuntoTDA claves = new ConjuntoLD();
+		claves.InicializarConjunto();
+		
+		ConjuntoTDA valores = new ConjuntoLD();
+		valores.InicializarConjunto();
+		
+		claves = D.Claves();
+		while(!claves.ConjuntoVacio())
+		{
+			c = claves.Elegir();
+			valores = D.Recuperar(c);
+			System.out.print("Clave:");
+			System.out.print(c);
+			while(!valores.ConjuntoVacio())
+			{
+				System.out.print(" Valor:");
+				System.out.println(valores.Elegir());
+				valores.Sacar(valores.Elegir());				
+			}
+			claves.Sacar(c);
+		}
+	}
 	
 	//TP3 4a
 	public void ColaPrioridadADicMult(ColaPrioridadTDA C, DiccionarioMultipleTDA D)
