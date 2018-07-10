@@ -7,6 +7,7 @@ import api.ConjuntoTDA;
 import api.DiccionarioMultipleTDA;
 import api.DiccionarioSimpleTDA;
 import api.ABBTDA;
+import api.GrafoTDA;
 import implement.arreglos.ColaPI;
 import implement.arreglos.ColaPU;
 import implement.arreglos.ColaPrioridadAO;
@@ -983,7 +984,7 @@ public class Utilidades {
 	
 	
 	
-	////////////////////////TP4
+	//////TP4
 	
 	
 	
@@ -1181,10 +1182,123 @@ public class Utilidades {
 	
 	
 	
+	//////TP6
 	
+	//TP 5 Ejercicio 4
+	public ConjuntoTDA VerticesAdyacentesDobles(GrafoTDA grafo, int vert) {
+		int x, y;
+		ConjuntoTDA ret = new ConjuntoLD();
+		ret.InicializarConjunto();
+		ConjuntoTDA aux1 = grafo.Vertices();
+		aux1.Sacar(vert);
+		ConjuntoTDA aux2 = grafo.Vertices();
+		while (!aux1.ConjuntoVacio()) {
+			x = aux1.Elegir();
+			aux2.Sacar(vert);
+			aux2.Sacar(x);
+			if (grafo.ExisteArista(vert, x)) {
+				while (!aux2.ConjuntoVacio()) {
+					y = aux2.Elegir();
+					if (grafo.ExisteArista(x, y))
+						ret.Agregar(y);
+					aux2.Sacar(y);
+				}
+			aux2 = grafo.Vertices();
+			}
+			aux1.Sacar(x);
+		}
+		return ret;
+	}
+
+	//TP 5 Ejercicio 5
+	public int AristaMayor(GrafoTDA grafo, int vert) {
+		int ret = 0;
+		int x;
+		ConjuntoTDA conj = grafo.Vertices();
+		while (!conj.ConjuntoVacio()) {
+			x = conj.Elegir();
+			if (grafo.ExisteArista(vert, x))
+				if (grafo.PesoArista(vert, x) > ret)
+					ret = grafo.PesoArista(vert, x);
+			conj.Sacar(x);
+		}
+
+		return ret;
+	}
+
+	//TP 5 Ejercicio 6
+	public ConjuntoTDA ConjuntoVertPredecesores(GrafoTDA grafo, int vert) {
+		int x;
+		ConjuntoTDA ret = new ConjuntoLD();
+		ret.InicializarConjunto();
+		ConjuntoTDA aux = grafo.Vertices();
+		while (!aux.ConjuntoVacio()) {
+			x = aux.Elegir();
+			if (grafo.ExisteArista(x, vert))
+				ret.Agregar(x);
+			aux.Sacar(x);
+		}
+		return ret;
+	}
+	//TP 5 Ejercicio 7
+	public ConjuntoTDA ConjuntoVertAislados(GrafoTDA grafo) {
+		int x, y;
+		boolean aislado = true;
+		ConjuntoTDA ret = new ConjuntoLD();
+		ret.InicializarConjunto();
+		ConjuntoTDA aux1 = grafo.Vertices();
+		ConjuntoTDA aux2 = grafo.Vertices();
+		while (!aux1.ConjuntoVacio()) {
+			x = aux1.Elegir();
+			while (!aux2.ConjuntoVacio() && aislado) {
+				y = aux2.Elegir();
+				if (grafo.ExisteArista(x, y) || grafo.ExisteArista(y, x))
+					aislado = false;
+				aux2.Sacar(y);
+			}
+			if (aislado)
+				ret.Agregar(x);
+			aux1.Sacar(x);
+			aux2 = grafo.Vertices();
+			aislado = true;
+		}
+		return ret;
+	}
 	
-	
-	
+	//TP 5 Ejercicio 8
+	public ConjuntoTDA ConjuntoVertPuente(GrafoTDA grafo, int vert1, int vert2) {
+		int x;
+		ConjuntoTDA ret = new ConjuntoLD();
+		ret.InicializarConjunto();
+		ConjuntoTDA aux = grafo.Vertices();
+		aux.Sacar(vert1);
+		aux.Sacar(vert2);
+		while (!aux.ConjuntoVacio()) {
+			x = aux.Elegir();
+			if (grafo.ExisteArista(vert1, x))
+				if (grafo.ExisteArista(x, vert2))
+					ret.Agregar(x);
+			aux.Sacar(x);
+		}
+		return ret;
+	}
+
+	//TP 5 Ejercicio 9
+	public int CalcularGradoVertice(GrafoTDA grafo, int vert) {
+		int ret = 0;
+		int x;
+		ConjuntoTDA conj = grafo.Vertices();
+		while (!conj.ConjuntoVacio()) {
+			x = conj.Elegir();
+			if (grafo.ExisteArista(vert, x))
+				ret++;
+			if (grafo.ExisteArista(x, vert))
+				ret--;
+			conj.Sacar(x);
+		}
+		return ret;
+	}
+
 	
 }
 
